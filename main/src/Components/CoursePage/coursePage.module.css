@@ -1,0 +1,23 @@
+.topbar img{
+    width: 15px
+}
+
+.topbar div{
+    font-size: 20px;
+}
+
+.topbar{
+    display: flex;
+}
+
+.carouselBtns{
+    display: flex;
+    margin-left: 400px;
+    width: 500px;
+    justify-content: space-between;
+}
+
+.arrowCont{
+    background-color: #da0a35;
+    padding: 15px
+}

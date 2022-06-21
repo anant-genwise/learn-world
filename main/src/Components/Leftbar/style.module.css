@@ -1,0 +1,17 @@
+.img{
+    width: 20px;
+    padding: 10px;
+}
+
+.leftbar{
+    border-right: 1px solid grey;
+    height: 1080px;
+    width: 200px
+}
+
+.nav{
+    display: "flex"; 
+    flex-direction: "column";
+    margin-top: 100px;
+
+}
