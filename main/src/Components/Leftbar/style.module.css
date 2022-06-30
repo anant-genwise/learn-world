@@ -6,12 +6,35 @@
 .leftbar{
     border-right: 1px solid grey;
     height: 1080px;
-    width: 200px
+    width: 250px;
+}
+
+.imgCont{
+    padding-top: 20px;
 }
 
 .nav{
     display: "flex"; 
     flex-direction: "column";
     margin-top: 100px;
+}
 
+.nav > div{
+    display: flex;
+    font-size: 16px;
+    padding: 10px;
+    padding-top: 15px;
+    font-weight: 600;
+    border-left: 6px solid white;
+}
+
+.nav > div:nth-child(4){
+   background-color: #f2f6ff;
+   border-left: 6px solid #3470e4;
+   color: #3470e4;
+   cursor: pointer;
+}
+
+.nav img {
+    margin-top: -10px;
 }

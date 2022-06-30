@@ -1,5 +1,5 @@
 .main{
-    width: 25%;
+    width: 100%;
     text-align: left;
     
 }
@@ -12,6 +12,11 @@
 
 .space{
     display: flex;
+    color: white
+}
+
+.space div, img{
+    cursor: pointer;
 }
 
 .moduleName{
@@ -46,17 +51,25 @@
 .content{
     background-color: #f5f5f5;
     margin-left: 40px;
-    padding: 15px
+    padding: 15px 0px;
+    padding-right: 10px;
+}
+
+.content > div > div{
+    display: flex;
+    font-size: 18px;
+    color: #797979;
+    margin-bottom: 13px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.content > div> div:nth-child(1) >img{
+    width: 25px;
+    margin-right: 5px;
 }
 
 .content > div{
     display: flex;
-    font-size: 20px;
-    color: #797979;
-    margin-bottom: 10px;
-}
-
-.content > div> img{
-    width: 30px;
-    margin-right: 5px;
+    justify-content: space-between;
 }

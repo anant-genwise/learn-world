@@ -1,32 +1,19 @@
-import React, { Component } from 'react';
-import VideoPlayer from 'react-video-js-player';
-   
-class VideoPlayers extends Component {
-    player = {}
-    state = {
-        video: {
-            src: "https://www.youtube.com/watch?v=uuZE_IRwLNI",
-            poster: "/1.png"
-        }
-    }
-   
-    onPlayerReady(player){
-        this.player = player;
-    }
-   
-    render() {
-        return (
-            <div>
-                <VideoPlayer
-                    controls={true}
-                    src={this.state.video.src}
-                    poster={this.state.video.poster}
-                    width="720"
-                    height="420"
-                    onReady={this.onPlayerReady.bind(this)}
-                />
-            </div>
-        );
-    }
+import React from 'react'
+
+export default function VideoPlayers({videoLink}) {
+    return (
+        <div>
+            <iframe 
+                width="560" 
+                height="315"
+                src= {videoLink}
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen="true" 
+                style={{width: "100%", height: "1000px"}}>
+                
+            </iframe>
+        </div>
+    )
 }
-export default VideoPlayers;

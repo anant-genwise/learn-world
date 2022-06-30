@@ -6,7 +6,7 @@ import 'antd/dist/antd.less';
 import { Progress } from 'antd';
 import youtube from "../../../Images/youtube.svg"
 
-export default function CoursePageNav({isNavOpen, setIsNavOpen}) {
+export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeVideo, setActiveVideo}) {
 
     const [isTopicContentVisible, setIsTopicContentVisible] = useState(false)
 
@@ -23,7 +23,10 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen}) {
         else{
             navbar.style.display = "block"
         }
+        
     }, [isNavOpen])
+
+    console.log(activeVideo)
 
     return (
         <div className = {styles.main} id = "navbar" >
@@ -58,22 +61,25 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen}) {
                 </div>
             </div>
             <div className = {styles.content} >
-                <div>
-                    <img src = {youtube} />
-                    <div>Lecture 1</div>
-                </div>
-                <div>
-                    <img src = {youtube} />
-                    <div>Lecture 2</div>
-                </div>
-                <div>
-                    <img src = {youtube} />
-                    <div>Lecture 3</div>
-                </div>
-                <div>
-                    <img src = {youtube} />
-                    <div>Lecture 4</div>
-                </div>
+                {
+                    content?.map(item => {
+                        return(
+                            <div style = {{borderLeft: activeVideo.id === item.id ? "4px solid #da0a35": ""}} onClick = {() => setActiveVideo(item) } >
+                                <div>
+                                    <img src = {youtube} />
+                                    <div> {item.name} </div>
+                                </div>
+                                {
+                                    activeVideo.id === item.id  ? 
+                                    <div>
+                                        <img width = "20px"  src = "https://img.icons8.com/fluency-systems-filled/344/checkmark.png" />
+                                    </div> : ""
+                                }
+                            </div>
+                            
+                        )
+                    })
+                }
             </div>
             
         </div>
