@@ -8,6 +8,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import {useSelector, useDispatch} from 'react-redux'
 import {Navigate} from 'react-router-dom'
 import { authenticateUser, setUserDetails } from '../Redux/actions';
+import axios from 'axios';
 
 export const LoginModal = ({open}) => {
     const [isModalVisible, setIsModalVisible] = useState(open);
@@ -37,7 +38,33 @@ export const LoginModal = ({open}) => {
         // dispatch(setUserDetails(firebase.auth().currentUser))
 
         return () => {
-            dispatch(setUserDetails(firebase.auth().currentUser))
+
+            console.log(firebase.auth().currentUser.multiFactor.user.displayName)
+            const payload = {
+                name: firebase.auth().currentUser.multiFactor.user.displayName,
+                email: firebase.auth().currentUser.multiFactor.user.email
+            }
+
+            var existingUser = false
+            
+            axios.get("http://127.0.0.1:8000/users")
+                .then((res) => {
+                    console.log(res)
+                    res.data.forEach(el => {
+                        if(el.email === firebase.auth().currentUser.multiFactor.user.email ){
+                            existingUser = true
+                            return
+                        }
+                    });
+                })
+                .then(() => {
+                    console.log("exisitng user", existingUser)
+                    if(!existingUser){
+                        axios.post("http://127.0.0.1:8000/users", payload)
+                    }
+                })
+
+            localStorage.setItem("user", JSON.stringify(firebase.auth().currentUser.multiFactor.user))
         }
 
     }, [])
@@ -51,7 +78,7 @@ export const LoginModal = ({open}) => {
       setIsModalVisible(false);
     };
 
-    console.log(isAuth)
+
     return (
         <div>
             <Modal footer = {null} visible={isModalVisible} onCancel={handleCancel} >

@@ -18,21 +18,12 @@ export const Login = () => {
     const isAuth = useSelector(state => state.isAuth)
     const dispatch = useDispatch()
 
-    const uiConfig = {
-        signInFlow: "popup",
-        signInOptions: [
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ],
-        callbacks: {
-            signInSuccess: () => false
-        }
-    }
-
     useEffect(() => {
 
         firebase.auth().onAuthStateChanged(user => {
             dispatch(authenticateUser(!!user))
         })
+
     }, [])
 
     return (

@@ -52,3 +52,14 @@ export const setUserDetails = (payload) => dispatch => {
     dispatch(setUserDetailsSuccess(payload))
     
 }
+
+export const loginModalSuccess = (payload) => {
+    return{
+        type: SET_CURRENT_USER_DETAILS_SUCCESS,
+        payload
+    }
+}
+
+export const openLoginModal = (payload) => dispatch => {
+    dispatch(loginModalSuccess(payload))
+}

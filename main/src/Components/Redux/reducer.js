@@ -1,9 +1,9 @@
-import { AUTHENTICATION_SUCCESS, GET_CURRENT_STATE } from "./actionTypes"
+import { AUTHENTICATION_SUCCESS, GET_CURRENT_STATE, SET_CURRENT_USER_DETAILS_REQUEST, SET_CURRENT_USER_DETAILS_SUCCESS } from "./actionTypes"
 
 
 const initState = {
-    isAuth: [],
-    userDetails: {}
+    isAuth: false,
+    currentUser: {}
 }
 
 export const reducer = (state = initState, {type, payload}) => {
@@ -16,6 +16,11 @@ export const reducer = (state = initState, {type, payload}) => {
             return{
                 ...state,
                 isAuth: payload
+            }
+        case SET_CURRENT_USER_DETAILS_SUCCESS:
+            return{
+                ...state,
+                currentUser: payload
             }
         default:
             return state

@@ -1,0 +1,118 @@
+.certificate-template-container {
+	display: flex;
+	flex-direction: column;
+	height: 60vh;
+	width: 1300px;
+	margin: auto;
+	background-color: #ffffff;
+	text-align: center;
+	letter-spacing: 2px;
+}
+
+.certificate-top-strip {
+	height: 50px;
+	width: 100%;
+	background-color: #1b72e8;
+	margin: 0px;
+	padding: 0px;
+}
+
+.certificate-issuer-logo {
+    width: 100px;
+	margin: 10px auto;
+	margin-bottom: 0px;
+	margin-top: 50px;
+	max-width: 300px;
+	max-height: 77px;
+}
+
+.certificate-issuer-details {
+	margin: auto;
+	height: 300px;
+	width: fit-content;
+	margin-top: 30px;
+}
+
+.certificate-text {
+	letter-spacing: 36px;
+	font-size: 55px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	margin: auto;
+	font-family: 'Times New Roman', Times, serif;
+	font-weight: 500;
+}
+
+.certificate-completion-text {
+	letter-spacing: 8px;
+	font-size: 15px;
+	margin-left: 40px;
+	font-family: 14px;
+}
+
+.certificate-reciever-details {
+	margin-top: -120px;
+	text-align: center;
+}
+
+.certificate-reciever-text {
+	font-size: 15px;
+	font-weight: 300;
+	word-spacing: 2px;
+}
+
+.certificate-reciever-name {
+	font-size: 35px;
+	font-style: italic;
+	font-weight: 300;
+	word-spacing: 2px;
+}
+
+.certiticate-reciever-divider {
+	margin: auto;
+	width: 900px;
+	border: 0.5px solid #000000;
+}
+
+.certiticate-and-course-name {
+	margin: 40px auto;
+	line-height: 50px;
+	margin-top: 10px;
+}
+
+.certiticate-and-course-name > :nth-child(1) {
+	word-spacing: 2px;
+	font-size: 15px;
+	font-weight: 300;
+}
+
+.certiticate-course-name {
+	font-size: 23px;
+	word-spacing: 1px;
+	line-height: 5px;
+	font-weight: 600;
+}
+
+.certiticate-verifier-details {
+	display: flex;
+	justify-content: space-between;
+	margin: 0px 100px;
+	margin-left: 200px;
+}
+
+.certiticate-verifier-details > div > :nth-child(1) {
+	font-style: bold;
+	font-size: 20px;
+	font-weight: 600;
+}
+.certiticate-verifier-details > div > :nth-child(3) {
+	margin-left: 10px;
+}
+
+.certificate-issuer-desig {
+	margin-left: 60px;
+}
+
+.certificate-number {
+	margin-left: 50px;
+}
