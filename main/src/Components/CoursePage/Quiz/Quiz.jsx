@@ -9,8 +9,28 @@ export default function Quiz({data}) {
     const [selectedOptions, setSelectedOptions] = useState([])
 
     const handleSelectOption = (index) => {
+        
         if(selectedOptions.length === 0){
-            axios.post("http://127.0.0.1:8000/quiz-submissions")
+            var alreadyAnswered = false
+            axios.get("http://127.0.0.1:8000/quiz-submissions")
+                .then(res => {
+                    res.data.forEach(item => {
+                        if( item.quiz_id === data.id){
+                            alreadyAnswered = true
+                        }
+                    })
+                })
+                .then(() => {
+                    console.log(alreadyAnswered)
+                    if(!alreadyAnswered){
+                        const payload = {
+                            user_id: JSON.parse(localStorage.getItem("user")).uid,
+                            quiz_id: data.id,
+                            isCorrect: explanation[index] === "correct",
+                        }
+                        axios.post("http://127.0.0.1:8000/quiz-submissions", payload)
+                    }
+                })
         }
         setSelectedOptions([...selectedOptions, options[index] ])
     }

@@ -3,9 +3,11 @@ import leftArrow from "../../../Images/leftArrow.svg"
 import doubleLeftArrow from "../../../Images/doubleLeftArrow.svg"
 import styles from "./style.module.css"
 import 'antd/dist/antd.less';
-import { Progress } from 'antd';
+import { Button, Progress } from 'antd';
 import youtube from "../../../Images/youtube.svg"
 import axios from 'axios';
+import Certificate from '../../Certificate/Certificate';
+import Modal from 'antd/lib/modal/Modal';
 
 export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeVideo, setActiveVideo}) {
 
@@ -14,40 +16,88 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
     const [contentProgress, setContentProgress] = useState([])
     const [activeVideoIndex, setActiveVideoIndex] = useState(0)
     const [quiz, setQuiz] = useState([])
+    const [isDownload, setIsDownload] = useState(false)
+    const [isElegibleForCertificate, setIsEligibleForCertificate] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
 
     const toggleNavbar = () => {
         setIsNavOpen(!isNavOpen)
     }
 
-    const updateActiveVideo = (videoObj) => {
-        setActiveVideo(videoObj)
-        const payload = {
-            completed: true,
-            content_id: videoObj.id,
-            user_id: userDetails.uid
-        }
-
-        var isCompleted = false
-
-        contentProgress.forEach(el => {
-            if(el.content_id === videoObj.id ){
-                isCompleted = true
+    const updateActiveVideo = (videoObj, index) => {
+        var prevVideoComplete = false
+        contentProgress.forEach(item => {
+            console.log(item.content_id, content[index-1].id)
+            if(item.content_id === content[index-1].id){
+                prevVideoComplete = true
             }
         })
 
-        if(!isCompleted){
-            console.log("is completed")
-           axios.post("http://127.0.0.1:8000/add-progress", payload)
-        }
+        console.log(videoObj)
+        if(prevVideoComplete || index === 0){
+            setActiveVideo(videoObj)
+            const payload = {
+                completed: true,
+                content_id: videoObj.id,
+                user_id: userDetails.uid,
+                type: videoObj.type
+            }
 
-        console.log(userDetails)
-        console.log(payload)
+            var isCompleted = false
+
+            contentProgress.forEach(el => {
+                if(el.content_id === videoObj.id ){
+                    isCompleted = true
+                }
+            })
+
+            if(!isCompleted){
+                axios.post("http://127.0.0.1:8000/add-progress", payload)
+            }
+
+        }
+    }
+
+    const evaluateCertificateEligibility = () => {
+        var quizContentProgress
+        axios.get("http://127.0.0.1:8000/quiz-submissions")
+            .then(res => {
+                console.log(res.data)
+                quizContentProgress = res.data.filter(item => item.isCorrect === true)
+            })
+            .then(() => {
+                var totalQuiz = content.filter(item => item.type === "quiz")
+
+                if(Math.floor((quizContentProgress?.length/totalQuiz.length)*100) >= 70){
+                    setIsEligibleForCertificate(true)
+                }
+            })
+       
+    }
+
+    const downloadCertificate = () => {
+        if(isElegibleForCertificate ){
+            setIsDownload(true)
+        }
+        else{
+           setIsModalVisible(true)
+        }
+    }
+ 
+    const handleOk = () => {
+        setIsModalVisible(false);
+      };
+    
+    const handleCancel = () => {
+    setIsModalVisible(false);
+    };
+
+    const handleReattempt = () => {
         
     }
 
     useEffect(() => {
         var navbar = document.getElementById("navbar")
-        console.log(document.getElementById("navbar"))
         if(!isNavOpen){
             navbar.style.display = "none"
         }
@@ -59,11 +109,16 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
 
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/progress").then(res => {
-            var data = res.data.filter(item => item.user_id === userDetails.uid )
-            setContentProgress(data)
-        })
-    }, [])
+        axios.get("http://127.0.0.1:8000/progress")
+            .then(res => {
+                var data = res.data.filter(item => item.user_id === userDetails.uid )
+                setContentProgress(data)
+            })
+            .then(() => {
+                evaluateCertificateEligibility()
+            })
+
+    }, [contentProgress])
 
     useEffect(() => {
         var isCompleted = false
@@ -75,7 +130,6 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
         })
 
         if(!isCompleted){
-            console.log("is completed")
             const payload =  {
                 completed: true,
                 content_id: activeVideo.id,
@@ -85,10 +139,6 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
         }
     }, [])
 
-
-    console.log(quiz)
-    console.log(Math.floor((contentProgress.length/content.length)*100))
-    console.log(contentProgress)
     return (
         <div className = {styles.main} id = "navbar" >
             <div className = {styles.red} >
@@ -130,7 +180,7 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
                                     borderLeft: activeVideo.id === item.id ? "4px solid #da0a35": "",
                                     opacity: contentProgress.filter(el => el.content_id ===  item.id).length > 0 || index === 0 ? "100%" : "30%"
                                 }} 
-                                onClick = {() => updateActiveVideo(item) } >
+                                onClick = {() => updateActiveVideo(item, index) } >
                                 <div>
                                     <img 
                                         src = { item.type === "video" ? 
@@ -143,7 +193,7 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
                                 {
                                     activeVideo.id === item.id || contentProgress.filter(el => el.content_id ===  item.id).length > 0 || index === 0  ? 
                                     <div>
-                                        <img width = "20px"  src = "https://img.icons8.com/fluency-systems-filled/344/checkmark.png" />
+                                        <img width = "20px" height = "20px" src = "https://cdn-icons-png.flaticon.com/512/753/753344.png" />
                                     </div> : ""
                                 }
                             </div>
@@ -151,8 +201,26 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
                         )
                     })
                 }
+                <div>
+                    <div
+                        style = {{opacity: isElegibleForCertificate ? "100%" : "30%"  }}
+                    >
+                        <img src = "https://cdn-icons-png.flaticon.com/512/3135/3135722.png" />
+                        <div
+                            onClick = {downloadCertificate}
+                        > 
+                            Download Certificate 
+                        </div>
+                    </div>
+                    <Certificate isDownload = {isDownload} setIsDownload = {setIsDownload} />
+                </div>
             </div>
-            
+
+            <Modal visible={isModalVisible} onCancel={handleCancel} onOk = {handleOk} width = "50%" >
+                <div>Sorry, you haven't completed all the quiz questions with 70% accuracy required for the certificate. </div>
+                <div>Please complete the quiz or re-aatempt the course</div>
+                <Button style = {{marginTop: "20px"}} >Re-Attempt</Button>
+            </Modal>
         </div>
     )
 }

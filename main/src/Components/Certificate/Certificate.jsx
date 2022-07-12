@@ -9,7 +9,6 @@ const CertificateTemplate = ({
 	certiticateCourseNameRef,
 	certificateIssuedDateRef,
 	certificateNumberRef,
-	playlistLevelTitleRef,
 }) => {
 	return (
 		<div ref={inputRef} className="certificate-template-container">
@@ -42,16 +41,15 @@ const CertificateTemplate = ({
 					For the successful completion of Masai's
 				</span>
 				<br />
-
 				<span className="certiticate-course-name" ref={certiticateCourseNameRef}>
-					Android Course
+					
 				</span>
 			</div>
 
 			<div className="certiticate-verifier-details">
 				<div className="certificate-issued-date">
 					<span ref={certificateIssuedDateRef}>
-						{new Date().toLocaleDateString()}
+						{/* {new Date().toLocaleDateString()} */}
 					</span>
 
 					<br />
@@ -74,15 +72,15 @@ const CertificateTemplate = ({
 	);
 };
 
-const Certificate = () => {
+const Certificate = ({isDownload, setIsDownload} ) => {
 	const inputRef = useRef(null);
 	const certificateRecieverNameRef = useRef(null);
 	const certiticateCourseNameRef = useRef(null);
 	const certificateIssuedDateRef = useRef(null);
 	const certificateNumberRef = useRef(null);
-	const playlistLevelTitleRef = useRef(null);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
+
 	const currUser = "Anant"
 
 	const [IsDownloadingInProgres, setIsDownloadingInProgres] = useState(false);
@@ -90,8 +88,6 @@ const Certificate = () => {
 
 	const downloadCertificate = async (
 		certificateTitle,
-		certificateId,
-		playlistLevelTitle,
 		issuedDate
 	) => {
 		setIsDownloadingInProgres(true);
@@ -100,16 +96,8 @@ const Certificate = () => {
 
 		const certificateRecieverName = certificateRecieverNameRef.current;
 
-		const userNameByConfirmation = window.confirm(
-			'Do you want to keep your default username on certificate?'
-		);
 
-		if (userNameByConfirmation) {
-			certificateRecieverName.textContent = currUser.name;
-		} else {
-			const userNameByChoice = prompt('Please enter your name?');
-			certificateRecieverName.textContent = userNameByChoice;
-		}
+		certificateRecieverName.textContent = JSON.parse(localStorage.getItem("user")).displayName;
 
 		const certiticateCourseName = certiticateCourseNameRef.current;
 
@@ -121,10 +109,6 @@ const Certificate = () => {
 
 		const certificateNumber = certificateNumberRef.current;
 
-		const payload = {
-			certificateId,
-			recipientName: certificateRecieverName.textContent,
-		};
 		const uniqueId = "27635128731j2bd7s"
 
 		certificateNumber.textContent = uniqueId
@@ -134,6 +118,7 @@ const Certificate = () => {
 		const html2canvas = await import(
 			/* webpackChunkName: "html2canvas"*/ 'html2canvas'
 		);
+        
 		const { jsPDF } = await import(/* webpackChunkName: "jspdf"*/ 'jspdf');
 
 		const canvas = await html2canvas.default(input);
@@ -141,18 +126,28 @@ const Certificate = () => {
 		const imgData = canvas.toDataURL('image/png');
 		const pdf = new jsPDF('landscape', 'px', 'a3');
 
-        console.log(pdf)
-
 		pdf.addImage(imgData, 'PNG', 0, 0, 900, 600, undefined, false);
 
 		pdf.save('certificate.pdf');
 	};
+
+    useEffect(() => {
+        if(isDownload){
+            downloadCertificate("ANDROID COURSE", new Date().toLocaleDateString())
+        }
+    }, [isDownload])
 
 
 	return (
 		<>
 			<div
 				className="ceritificate-template-hidden"
+                style = {{
+                    position: 'absolute',
+					top: '-3000px',
+					width: 0,
+					height: 0,
+                }}
 			>
 				<CertificateTemplate
 					inputRef={inputRef}
@@ -160,10 +155,8 @@ const Certificate = () => {
 					certiticateCourseNameRef={certiticateCourseNameRef}
 					certificateIssuedDateRef={certificateIssuedDateRef}
 					certificateNumberRef={certificateNumberRef}
-					playlistLevelTitleRef={playlistLevelTitleRef}
 				/>
 			</div>
-            <button onClick = {downloadCertificate} >Download</button>
 		</>
 	);
 };
