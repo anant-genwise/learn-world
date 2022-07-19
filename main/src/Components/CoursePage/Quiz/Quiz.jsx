@@ -4,8 +4,8 @@ import styles from "./quiz.module.css"
 
 export default function Quiz({data}) {
 
-    const [options, setOptions] = useState(data.options.split(", "))
-    const [explanation, setExplanation] = useState(data.wrongAnsExplanation.split(", "))
+    const [options, setOptions] = useState(data.options)
+    const [explanation, setExplanation] = useState(data.wrongAnsExplanation)
     const [selectedOptions, setSelectedOptions] = useState([])
 
     const handleSelectOption = (index) => {

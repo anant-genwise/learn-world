@@ -27,7 +27,6 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
     const updateActiveVideo = (videoObj, index) => {
         var prevVideoComplete = false
         contentProgress.forEach(item => {
-            console.log(item.content_id, content[index-1].id)
             if(item.content_id === content[index-1].id){
                 prevVideoComplete = true
             }
@@ -62,7 +61,6 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
         var quizContentProgress
         axios.get("http://127.0.0.1:8000/quiz-submissions")
             .then(res => {
-                console.log(res.data)
                 quizContentProgress = res.data.filter(item => item.isCorrect === true)
             })
             .then(() => {
@@ -93,7 +91,9 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
     };
 
     const handleReattempt = () => {
-        
+        const payload = {}
+        axios.delete("http://127.0.0.1:8000/delete-progress")
+            .then(() => setContentProgress([]))
     }
 
     useEffect(() => {
@@ -139,6 +139,7 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
         }
     }, [])
 
+    console.log(contentProgress) 
     return (
         <div className = {styles.main} id = "navbar" >
             <div className = {styles.red} >
@@ -168,7 +169,7 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
                     }  */}
                 </div>
                 <div className = {styles.topicName} >
-                    1. Excel
+                    1. Android
                 </div>
             </div>
             <div className = {styles.content} >
@@ -219,7 +220,7 @@ export default function CoursePageNav({isNavOpen, setIsNavOpen, content, activeV
             <Modal visible={isModalVisible} onCancel={handleCancel} onOk = {handleOk} width = "50%" >
                 <div>Sorry, you haven't completed all the quiz questions with 70% accuracy required for the certificate. </div>
                 <div>Please complete the quiz or re-aatempt the course</div>
-                <Button style = {{marginTop: "20px"}} >Re-Attempt</Button>
+                <Button style = {{marginTop: "20px"}} onClick = {handleReattempt} >Re-Attempt</Button>
             </Modal>
         </div>
     )

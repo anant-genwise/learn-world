@@ -28,8 +28,8 @@ export default function Courses() {
                         <div style = {{display: "flex", justifyContent: "space-between"}}>
                             <div style = {{marginTop: "20px"}} > &#8377; Free</div>
                             <button 
-                                onClick = {() => handleRedirect("/android")}
-                                style = {{backgroundColor: "#3470e3", padding: "10px 15px", color: 'white', fontWeight: 600, border: "none", borderRadius: "6px"}} 
+                                onClick = {() => handleRedirect("/overview")}
+                                style = {{backgroundColor: "#3470e3", padding: "10px 15px", color: 'white', fontWeight: 600, border: "none", borderRadius: "6px", cursor: "pointer"}} 
                             >
                                 ENROLL
                             </button>
